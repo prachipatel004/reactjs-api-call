@@ -1,38 +1,137 @@
-.App {
+.selector-container {
+  background: #1e1e4e;
+  color: #fff;
+  max-width: 445px;
+  margin: auto;
+  padding: 16px;
+}
+
+.title {
+  text-align: center;
+  font-size: 14px;
+  color: #f8cc3e;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.highlight {
+  color: red;
+  font-weight: bold;
+}
+
+.dots {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+.dot {
+  height: 11px;
+  width: 23px;
+  background: #737373;
+}
+.dot.filled {
+  background: #ffffff;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.tab {
+  flex: 1;
+  margin: 0 4px;
+  padding: 6px;
+  background: #3d3d77;
+  color: #fff;
+  border-radius: 16px;
+  font-size: 12px;
+  border: none;
+}
+.tab.active {
+  background: #f8cc3e;
+  color: #000;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 13px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.search-box input {
+  width: 95%;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 10px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.player-card {
+  background: #2f2f61;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
 }
-
-.App-link {
-  color: #61dafb;
+.player-card.selected {
+  background: #f8cc3e;
+  color: #000;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.player-card img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+.player-info {
+  flex: 1;
+  margin-left: 10px;
+}
+.toggle-btn {
+  background: #fff;
+  color: #2f2f61;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+}
+.tab {
+  pointer-events: none;
+  opacity: 0.6;
+}
+.tab.active {
+  opacity: 1;
+  font-weight: bold;
+}
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+}
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+.confirm-btn,
+.prev-btn,
+.clear_btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #f8cc3e;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
 }
