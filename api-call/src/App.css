@@ -1,38 +1,178 @@
-.App {
+.selector-container {
+  background: #1b1c3f;
+  color: white;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-family: 'Arial', sans-serif;
+  max-width: 400px;
+  margin: auto;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.max-rule {
+  font-size: 0.9rem;
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.value.red {
+  color: red;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin: 1rem 0;
+}
+
+.tab-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 20px;
+  background-color: #2c2f59;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.tab-btn.active {
+  background-color: #ffc107;
+  color: black;
+}
+
+.search-info {
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  color: #aaa;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.player-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.player-card {
+  background-color: #2c2f59;
+  margin-bottom: 10px;
+  padding: 10px;
   display: flex;
-  flex-direction: column;
+  border-radius: 8px;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: all 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.player-card.selected {
+  background-color: white;
+  color: black;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.player-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.player-info {
+  flex-grow: 1;
+}
+
+.player-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.player-meta {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.player-card.selected .player-meta {
+  color: #444;
+}
+
+.action-btn {
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.add {
+  background-color: #ffc107;
+  color: black;
+}
+
+.remove {
+  background-color: #ccc;
+  color: black;
+}
+
+/* .confirm-btn {
+  margin-top: 1rem;
+  background-color: #ffc107;
+  color: black;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+} */
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 10px;
+  align-items: center;
+}
+.confirm-btn ,.clear-btn{
+width: 100%;
+  background-color: #ffc107;
+  color: black;
+  border: none;
+  padding: 12px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.back-btn{
+  background: #ffc107;
+  color: #000;
+  border-radius: 25px;
+  width: 100%;
+  max-height: 42px;
+    font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
 }
