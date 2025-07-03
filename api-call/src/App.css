@@ -1,3 +1,4 @@
+
 .selector-container {
   background: #1b1c3f;
   color: white;
@@ -70,7 +71,7 @@
 }
 
 .player-list {
-  max-height: 320px;
+  max-height: 300px;
   overflow-y: auto;
   padding-right: 5px;
 }
@@ -135,18 +136,6 @@
   color: black;
 }
 
-/* .confirm-btn {
-  margin-top: 1rem;
-  background-color: #ffc107;
-  color: black;
-  border: none;
-  padding: 12px;
-  border-radius: 25px;
-  width: 100%;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-} */
 .action-row {
   display: flex;
   justify-content: space-between;
@@ -175,4 +164,44 @@ width: 100%;
   font-weight: bold;
   border: none;
   padding: 12px;
+}
+.search-info{
+  gap: 10px;
+  display: flex;
+}
+.search-info select{
+  width: 35%;
+}
+.search-info input{
+  width: 50%;
+}
+
+.add-player-form{
+ gap: 10px;
+ display: flex;
+ flex-direction: column;
+}
+.add_btn{
+  margin-bottom: 10px;
+}
+.add-player-btn-wrapper button{
+  width: 100%;
+  margin-bottom: 20px;
+}
+.search-info input{
+  width: 100%;
+  background-color: #ffc107;
+  color: #000;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 5px;
+}
+.ant-pagination{
+  display: unset;
+}
+.ant-pagination .ant-pagination-item:not(.ant-pagination-item-active):hover{
+  background-color: #ffffff;
+}
+.anticon{
+  color: #fff;
 }

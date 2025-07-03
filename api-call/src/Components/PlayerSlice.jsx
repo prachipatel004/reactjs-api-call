@@ -1,28 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { createSlice } from '@reduxjs/toolkit';
 
-const TABS = ['WK', 'BAT', 'AR', 'BOWL'];
-const ROLE_MAP = {
-  WK: 'wicketkeeper',
-  BAT: 'batsman',
-  AR: 'allrounder',
-  BOWL: 'bowler',
-};
-
-const MAX_PLAYERS = 11;
-
-const DEFAULT_RULES = {
-  wicketkeeper: { min: 1, max: 4 },
-  batsman: { min: 3, max: 6 },
-  allrounder: { min: 1, max: 4 },
-  bowler: { min: 2, max: 6 },
-  max_team_selection: 7,
-  total_credit: 100,
-  team1: 'BLB',
-  team2: 'BUB',
-};
-
+// Full JSON fallback data
 
 const defaultUserData = {
   "data": {
@@ -299,187 +277,58 @@ const defaultUserData = {
   }
 };
 
-const PlayerSelector = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [players, setPlayers] = useState([]);
-  const [selectedPlayers, setSelectedPlayers] = useState([]);
-  const [spentPoints, setSpentPoints] = useState(0);
-  const [rules, setRules] = useState({});
 
-  const activeTab = TABS[activeTabIndex];
-  const currentRole = ROLE_MAP[activeTab];
-
-  useEffect(() => {
-    const userInStorage = localStorage.getItem('players');
-    if (!userInStorage) {
-      localStorage.setItem('players', JSON.stringify(defaultUserData));
-    }
-
-
-    const rulesInStorage = localStorage.getItem('rules');
-    if (!rulesInStorage) {
-      localStorage.setItem('rules', JSON.stringify(DEFAULT_RULES));
-    }
-  }, []);
-
-  useEffect(() => {
-    const storedRules = localStorage.getItem('rules');
-    if (storedRules) {
-      setRules(JSON.parse(storedRules));
-    }
-
-    const storedPlayers = localStorage.getItem('players');
-    const data = storedPlayers ? JSON.parse(storedPlayers) : {};
-    const all = data?.data || {};
-    setPlayers(all[currentRole] || []);
-  }, [activeTabIndex]);
-
-  const togglePlayer = (player) => {
-    const exists = selectedPlayers.find((p) => p.id === player.id);
-    const roleCount = selectedPlayers.filter((p) => p.type === player.type).length;
-    const teamCount = selectedPlayers.filter((p) => p.team_name === player.team_name).length;
-    const roleLimit = rules[player.type];
-
-    if (exists) {
-      setSelectedPlayers((prev) => prev.filter((p) => p.id !== player.id));
-      setSpentPoints((prev) => prev - parseFloat(player.point));
-    } else {
-      if (selectedPlayers.length >= MAX_PLAYERS) {
-        toast.error('Max 11 players allowed.', { autoClose: 2000 });
-        return;
-      }
-      if (roleLimit && roleCount >= roleLimit.max) {
-        toast.error(`You can select max ${roleLimit.max} ${player.type}(s)`, { autoClose: 2000 });
-        return;
-      }
-      if (teamCount >= rules.max_team_selection) {
-        toast.error(`Max ${rules.max_team_selection} players allowed from team ${player.team_name}`, { autoClose: 2000 });
-        return;
-      }
-
-      setSelectedPlayers((prev) => [...prev, player]);
-      setSpentPoints((prev) => prev + parseFloat(player.point));
-    }
-  };
-
-  const handleConfirm = () => {
-    const currentCount = selectedPlayers.filter((p) => p.type === currentRole).length;
-    const minRequired = rules[currentRole]?.min || 0;
-
-    if (currentCount < minRequired) {
-      toast.error(`Select at least ${minRequired} ${currentRole}(s).`, { autoClose: 2000 });
-      return;
-    }
-
-    if (activeTabIndex < TABS.length - 1) {
-      setActiveTabIndex((prev) => prev + 1);
-    } else {
-      if (selectedPlayers.length !== MAX_PLAYERS) {
-        toast.error('Select 11 players before submitting.', { autoClose: 2000 });
-        return;
-      }
-      toast.success('Team submitted successfully!', { autoClose: 2000 });
-      console.log('Selected Player IDs:', selectedPlayers.map((p) => p.id));
-    }
-  };
-
-  const handlePrevious = () => {
-    if (activeTabIndex > 0) {
-      setActiveTabIndex((prev) => prev - 1);
-    }
-  };
-  const handleClear = () => {
-    setSelectedPlayers([]);
-    setSpentPoints(0);
-    toast.info('Selection cleared.', { autoClose: 2000 });
-  };
-  return (
-    <div className="selector-container">
-      <ToastContainer />
-      <div className="header">
-        <span className="max-rule">Max {rules.max_team_selection || 0} Players from a team</span>
-        <div className="info-row">
-          <div>
-            <span className="label">Players</span>
-            <div className="value red">{selectedPlayers.length} of 11</div>
-          </div>
-          <div>
-            <span className="label">Spent</span>
-            <div className="value">{spentPoints}</div>
-          </div>
-          <div>
-            <span className="label">Remaining</span>
-            <div className="value">{(rules.total_credit || 100) - spentPoints}</div>
-          </div>
-        </div>
-      </div>
-      <div className="tabs">
-        {TABS.map((tab, index) => {
-          const role = ROLE_MAP[TABS[activeTabIndex]];
-          const currentCount = selectedPlayers.filter((p) => p.type === role).length;
-          const minRequired = rules[role]?.min || 0;
-          return (
-            <button
-              key={tab}
-              className={`tab-btn ${index === activeTabIndex ? 'active' : ''}`}
-              onClick={() => {
-                if (index === activeTabIndex) return;
-
-                if (currentCount < minRequired) {
-                  toast.error(`Select at least ${minRequired} ${role}(s) before switching tab.`, { autoClose: 2000 });
-                  return;
-                }
-
-                setActiveTabIndex(index);
-              }}
-            >
-              {tab} ({selectedPlayers.filter((p) => p.type === ROLE_MAP[tab]).length})
-            </button>
-          );
-        })}
-      </div>
-      <div className="search-info">Select players for {currentRole}</div>
-
-      <div className="player-list">
-        {players.map((player) => {
-          const isSelected = selectedPlayers.some((p) => p.id === player.id);
-          return (
-            <div key={player.id} className={`player-card ${isSelected ? 'selected' : ''}`}>
-              <img src={player.image} alt={player.name} className="player-img" />
-              <div className="player-info">
-                <div className="player-name">{player.name}</div>
-                <div className="player-meta">
-                  Points: {player.point} | Team: {player.team_name}
-                </div>
-              </div>
-              <button
-                className={`action-btn ${isSelected ? 'remove' : 'add'}`}
-                onClick={() => togglePlayer(player)}
-              >
-                {isSelected ? '−' : '+'}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="action-row">
-        {activeTabIndex > 0 && (
-          <button className="back-btn" onClick={handlePrevious}>
-            Previous
-          </button>
-        )}
-        {selectedPlayers.length > 0 && (
-          <button className="clear-btn" onClick={handleClear}>
-            Clear
-          </button>
-        )}
-        <button className="confirm-btn" onClick={handleConfirm}>
-          {activeTabIndex === TABS.length - 1 ? 'SUBMIT' : 'CONFIRM'}
-        </button>
-      </div>
-    </div>
-  );
+// Default rules if not in localStorage
+const DEFAULT_RULES = JSON.parse(localStorage.getItem('rules')) || {
+  wicketkeeper: { min: 1, max: 4 },
+  batsman: { min: 3, max: 6 },
+  allrounder: { min: 1, max: 4 },
+  bowler: { min: 2, max: 6 },
+  max_team_selection: 7,
+  total_credit: 100,
+  team1: 'BLB',
+  team2: 'BUB'
 };
 
-export default PlayerSelector;
+// Check if localStorage has valid player data
+let storedPlayers = null;
+try {
+  storedPlayers = JSON.parse(localStorage.getItem('players'));
+} catch (err) {
+  storedPlayers = null;
+}
+
+const initialState = {
+  players: storedPlayers?.data || defaultUserData.data,
+  rules: DEFAULT_RULES
+};
+
+const playerSlice = createSlice({
+  name: 'player',
+  initialState,
+  reducers: {
+    addPlayer: (state, action) => {
+      const { type, player } = action.payload;
+      if (!state.players[type]) state.players[type] = [];
+      state.players[type].push(player);
+      localStorage.setItem('players', JSON.stringify({ data: state.players }));
+    },
+    deletePlayer: (state, action) => {
+      const { type, id } = action.payload;
+      if (!state.players[type]) return;
+      state.players[type] = state.players[type].filter((p) => p.id !== id);
+      localStorage.setItem('players', JSON.stringify({ data: state.players }));
+    },
+    editPlayer: (state, action) => {
+      const { type, updatedPlayer } = action.payload;
+      if (!state.players[type]) return;
+      state.players[type] = state.players[type].map((p) =>
+        p.id === updatedPlayer.id ? updatedPlayer : p
+      );
+      localStorage.setItem('players', JSON.stringify({ data: state.players }));
+    }
+  }
+});
+
+export const { addPlayer, deletePlayer, editPlayer } = playerSlice.actions;
+export default playerSlice.reducer;
